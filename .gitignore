@@ -1,1 +1,9 @@
+#base
 *.log
+*.exe
+
+# Go
+*.go
+*.mod
+*.sum
+
