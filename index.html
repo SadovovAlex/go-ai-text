@@ -2,20 +2,37 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>AI SMS Service</title>
+	<title>AI SMS Generate</title>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
-			background-color: #f2f2f2;
-		}
-
-		h1 {
-			text-align: center;
+			background-image: url(https://wallpaperaccess.com/full/65145.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
 		}
 
 		.container {
 			width: 500px;
 			margin: 0 auto;
+			background-color: rgba(255, 255, 255, 0.8);
+			padding: 30px;
+			border-radius: 10px;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			text-align: center;
+			font-size: 36px;
+			margin: 0 0 30px;
+			padding-bottom: 30px;
+			border-bottom: 1px solid #dee2e6;
+		}
+
+		h1 img {
+			width: 60px;
+			height: 60px;
+			margin-right: 10px;
+			vertical-align: bottom;
 		}
 
 		label {
@@ -33,19 +50,24 @@
 			box-sizing: border-box;
 		}
 
-		input[type=submit] {
-			width: 100%;
+		.btn {
 			background-color: #4CAF50;
 			color: white;
-			padding: 14px 20px;
-			margin: 8px 0;
+			padding: 12px 20px;
 			border: none;
 			border-radius: 4px;
 			cursor: pointer;
+			text-decoration: none;
+			margin: 10px;
 		}
 
-		input[type=submit]:hover {
+		.btn:hover {
 			background-color: #45a049;
+		}
+
+		input[type=text]#result {
+			width: 100%;
+			height: 300px;
 		}
 
 		footer {
@@ -55,15 +77,40 @@
 			color: white;
 		}
 	</style>
+<script>
+    async function sendRequest(text) {
+        const data = new FormData();
+        data.append('prompt', text);
+
+        const response = await fetch('http://localhost:8080/getAiSmsContent', {
+            method: 'POST',
+            body: data
+        });
+
+        const textResponse = await response.text();
+        document.getElementById('result').value = textResponse;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text);
+    }
+</script>    
 </head>
 <body>
 	<div class="container">
-		<h1>AI SMS Service</h1>
-		<form action="http://localhost:8080/getAiSmsContent" method="POST">
+		<h1><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Message_icon_%28iStock_photo%29.svg/1200px-Message_icon_%28iStock_photo%29.svg.png" alt="SMS Icon"> AI SMS Service</h1>
+		<form action="javascript:void(0);">
 			<label for="prompt">Text prompt:</label>
-			<input type="text" id="prompt" name="prompt"><br>
-			<input type="submit" value="Send">
+			<input type="text" id="prompt" name="prompt" value="Сгенерируй 3 текста на основе 'Выполнен вход в ваш аккаунт Строки, если это были не вы зайдите на lk.zzz.ru'"><br>
+			<button class="btn" type="button" onclick="copyToClipboard(document.getElementById('prompt').value)">Copy</button>
+			<button class="btn" type="button" onclick="sendRequest(document.getElementById('prompt').value)">Send</button>
 		</form>
+		<table>
+			<tr>
+				<td><label for="result">Result:</label></td>
+				<td><textarea id="result" readonly style="width: 100%; height: 300px; font-family: monospace; resize: none;"></textarea></td>
+			</tr>
+		</table>
 	</div>
 	<footer>
 		<p>2024 © AI SMS Service</p>
